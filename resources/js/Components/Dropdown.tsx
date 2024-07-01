@@ -1,6 +1,14 @@
-import { useState, createContext, useContext, PropsWithChildren, Dispatch, SetStateAction } from 'react';
-import { Link, InertiaLinkProps } from '@inertiajs/react';
-import { Transition } from '@headlessui/react';
+import {
+    ButtonHTMLAttributes,
+    createContext,
+    Dispatch,
+    PropsWithChildren,
+    SetStateAction,
+    useContext,
+    useState
+} from 'react';
+import {InertiaLinkProps, Link} from '@inertiajs/react';
+import {Transition} from '@headlessui/react';
 
 const DropDownContext = createContext<{
     open: boolean;
@@ -8,11 +16,13 @@ const DropDownContext = createContext<{
     toggleOpen: () => void;
 }>({
     open: false,
-    setOpen: () => {},
-    toggleOpen: () => {},
+    setOpen: () => {
+    },
+    toggleOpen: () => {
+    },
 });
 
-const Dropdown = ({ children }: PropsWithChildren) => {
+const Dropdown = ({children}: PropsWithChildren) => {
     const [open, setOpen] = useState(false);
 
     const toggleOpen = () => {
@@ -20,14 +30,14 @@ const Dropdown = ({ children }: PropsWithChildren) => {
     };
 
     return (
-        <DropDownContext.Provider value={{ open, setOpen, toggleOpen }}>
+        <DropDownContext.Provider value={{open, setOpen, toggleOpen}}>
             <div className="relative">{children}</div>
         </DropDownContext.Provider>
     );
 };
 
-const Trigger = ({ children }: PropsWithChildren) => {
-    const { open, setOpen, toggleOpen } = useContext(DropDownContext);
+const Trigger = ({children}: PropsWithChildren) => {
+    const {open, setOpen, toggleOpen} = useContext(DropDownContext);
 
     return (
         <>
@@ -38,8 +48,12 @@ const Trigger = ({ children }: PropsWithChildren) => {
     );
 };
 
-const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-white', children }: PropsWithChildren<{ align?: 'left'|'right', width?: '48', contentClasses?: string }>) => {
-    const { open, setOpen } = useContext(DropDownContext);
+const Content = ({align = 'right', width = '48', contentClasses = 'py-1 bg-white', children}: PropsWithChildren<{
+    align?: 'left' | 'right',
+    width?: '48',
+    contentClasses?: string
+}>) => {
+    const {open, setOpen} = useContext(DropDownContext);
 
     let alignmentClasses = 'origin-top';
 
@@ -77,7 +91,7 @@ const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-whit
     );
 };
 
-const DropdownLink = ({ className = '', children, ...props }: InertiaLinkProps) => {
+const DropdownLink = ({className = '', children, ...props}: InertiaLinkProps) => {
     return (
         <Link
             {...props}
@@ -91,8 +105,23 @@ const DropdownLink = ({ className = '', children, ...props }: InertiaLinkProps) 
     );
 };
 
+const DropdownButton = ({className = '', children, ...props}: ButtonHTMLAttributes<HTMLButtonElement>) => {
+    return (
+        <button
+            {...props}
+            className={
+                'block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out ' +
+                className
+            }
+        >
+            {children}
+        </button>
+    );
+};
+
 Dropdown.Trigger = Trigger;
 Dropdown.Content = Content;
 Dropdown.Link = DropdownLink;
+Dropdown.Button = DropdownButton;
 
 export default Dropdown;

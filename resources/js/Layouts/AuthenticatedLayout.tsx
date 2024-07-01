@@ -9,8 +9,6 @@ export default function Authenticated({user, header, children}: PropsWithChildre
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const {can} = usePolicy();
 
-    console.log(can('view_movies'))
-
     return (
         <div className="min-h-screen bg-gray-100">
             <nav className="bg-white border-b border-gray-100">
@@ -97,9 +95,16 @@ export default function Authenticated({user, header, children}: PropsWithChildre
 
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                            Dashboard
-                        </ResponsiveNavLink>
+                        {can('view_dashboard') &&
+                            <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
+                                Dashboard
+                            </ResponsiveNavLink>
+                        }
+                        {can('view_movies') &&
+                            <ResponsiveNavLink href={route('movie.index')} active={route().current('movie.*')}>
+                                Movies
+                            </ResponsiveNavLink>
+                        }
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">

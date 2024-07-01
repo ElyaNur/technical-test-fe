@@ -13,7 +13,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     if (auth()->user()->hasPermissionTo('view_dashboard') === false) {
-        abort(403);
+        return redirect()->route('movie.index');
     }
 
     $movie = Movie::select(['movie_id', 'title', DB::raw('count(*)')])

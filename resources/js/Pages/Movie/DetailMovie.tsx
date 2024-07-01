@@ -147,11 +147,11 @@ const DetailMovie = ({auth, movie, token, movieId}: DetailMovieProps) => {
                                                 alt={state.movie.title} className="w-48 sm:w-64"/>
                                         </div>
                                         <div className="sm:ms-6 mt-6 sm:mt-0">
-                                            <h2 className="text-3xl font-semibold text-white">{state.movie.title}
+                                            <h2 className="text-3xl font-semibold text-white text-center sm:text-left">{state.movie.title}
                                                 <span
                                                     className="ml-2 font-normal text-gray-300">({new Date(state.movie.release_date).getFullYear()})</span>
                                             </h2>
-                                            <div className="flex items-center text-white gap-1">
+                                            <div className="flex flex-col sm:flex-row items-center text-white gap-1">
                                                 <span>{new Intl.DateTimeFormat('id-ID').format(new Date(state.movie.release_date))}</span>
                                                 <span
                                                     className="before:content-['•'] before:mr-1">{state.movie.genres.map((genre: any) => genre.name).join(', ')}</span>
@@ -167,7 +167,8 @@ const DetailMovie = ({auth, movie, token, movieId}: DetailMovieProps) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-5 grid grid-cols-6 gap-4">
+                        <div
+                            className="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-5 grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-10 sm:gap-4">
                             <div>
                                 <h3 className="font-semibold">Production Companies</h3>
                                 <div className="flex gap-5 mt-3">

@@ -5,6 +5,7 @@ import {useEffect, useMemo, useReducer} from "react";
 import movieReducer, {initialState} from "@/Pages/Movie/MovieReducer";
 import PrimaryButton from "@/Components/PrimaryButton";
 import SecondaryButton from "@/Components/SecondaryButton";
+import Dropdown from "@/Components/Dropdown";
 
 interface MovieProps extends PageProps {
     token: string;
@@ -49,13 +50,20 @@ const Movie = ({auth, token}: MovieProps) => {
             .catch(err => console.error(err));
     }
 
+    const dropdownCategory: { [p: string]: string } = {
+        'now_playing': 'Now Playing',
+        'popular': 'Popular',
+        'top_rated': 'Top Rated',
+        'upcoming': 'Upcoming',
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
             header={
-                <div className="flex gap-5 items-center">
+                <div className="flex gap-5 items-center md:justify-start justify-between">
                     <h2 className="font-semibold text-xl text-gray-800 leading-tight">Movies</h2>
-                    <div className="flex gap-2">
+                    <div className="hidden gap-2 sm:flex">
                         {state.category === 'now_playing'
                             ? <PrimaryButton>Now Playing</PrimaryButton>
                             : <SecondaryButton onClick={() => fetchMovies('now_playing')}>Now Playing</SecondaryButton>}
@@ -69,13 +77,47 @@ const Movie = ({auth, token}: MovieProps) => {
                             ? <PrimaryButton>Upcoming</PrimaryButton>
                             : <SecondaryButton onClick={() => fetchMovies('upcoming')}>Upcoming</SecondaryButton>}
                     </div>
+                    <div className="flex sm:hidden">
+                        <Dropdown>
+                            <Dropdown.Trigger>
+                                <span className="inline-flex rounded-md">
+                                    <button
+                                        type="button"
+                                        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                    >
+                                        {dropdownCategory[state.category]} {state.loading && '...'}
+                                        <svg
+                                            className="ms-2 -me-0.5 h-4 w-4"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 20 20"
+                                            fill="currentColor"
+                                        >
+                                            <path
+                                                fillRule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clipRule="evenodd"
+                                            />
+                                        </svg>
+                                    </button>
+                                </span>
+                            </Dropdown.Trigger>
+
+                            <Dropdown.Content>
+                                <Dropdown.Button onClick={() => fetchMovies('now_playing')}>Now
+                                    Playing</Dropdown.Button>
+                                <Dropdown.Button onClick={() => fetchMovies('popular')}>Popular</Dropdown.Button>
+                                <Dropdown.Button onClick={() => fetchMovies('top_rated')}>Top Rated</Dropdown.Button>
+                                <Dropdown.Button onClick={() => fetchMovies('upcoming')}>Upcoming</Dropdown.Button>
+                            </Dropdown.Content>
+                        </Dropdown>
+                    </div>
                 </div>
             }
         >
             <Head title="Movies"/>
 
             <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-5 gap-5">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-5">
                     {state.movies.length > 0 && !state.loading && state.movies.map((movie: any) => (
                         <div key={movie.id} className="bg-white overflow-hidden shadow-sm sm:rounded-lg relative">
                             <div className="flex items-center absolute bg-white rounded p-1 bg-opacity-70">
